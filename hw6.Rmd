@@ -4,8 +4,18 @@ author: "Matthew Spotnitz"
 date: "11/23/2021"
 output: github_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r}
+library(tidyverse)
+library(ggplot2)
 ```
+##Problem 1
+I will import and view the birthweight dataset.
+```{r}
+birthweight_df = read.csv("birthweight.csv")
+head(birthweight_df)
+tail(birthweight_df)
+str(birthweight_df)
+view(birthweight_df)
+```
+There are 4342 observations and 20 variables.  Those variables are combinations of integer and numerical formats.
 
