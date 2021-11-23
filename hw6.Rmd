@@ -12,10 +12,21 @@ library(ggplot2)
 I will import and view the birthweight dataset.
 ```{r}
 birthweight_df = read.csv("birthweight.csv")
+birthweight_df = janitor::clean_names(birthweight_df)
 head(birthweight_df)
 tail(birthweight_df)
 str(birthweight_df)
 view(birthweight_df)
 ```
-There are 4342 observations and 20 variables.  Those variables are combinations of integer and numerical formats.
+There are 4342 observations and 20 variables.  Those variables are combinations of integer and numerical formats. I will dnow drop missing values.
+```{r}
+birthweight_na_df = drop_na(birthweight_df)
+str(birthweight_na_df)
+```
+There were no missing values.  Therefore, it is appropriate to use the original dataframe. I will make a facetwrap that shows a histogram of each variable
+
+```{r}
+ggplot(gather(birthweight_df), aes(value)) + geom_histogram(bins = 10) + facet_wrap(~key, scales = 'free_x')
+```
+After looking at these plots, I intend to convert babysex, frace, mrace, malform, and mrace into factor variables.
 
