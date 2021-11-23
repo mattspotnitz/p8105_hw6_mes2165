@@ -268,6 +268,24 @@ birthweight_factor_df %>% ggplot(aes(x = mrace, y= bwt)) + geom_boxplot() #There
 birthweight_factor_df %>% ggplot(aes(x = malform, y= bwt)) + geom_boxplot() # There is not a strong correlation
 ```
 
-![](hw6_files/figure-gfm/unnamed-chunk-7-4.png)<!-- --> On the basis of
-this exploratory data analysis, head circumference and extremity length
-have the strongest correlation with birthweight.
+![](hw6_files/figure-gfm/unnamed-chunk-7-4.png)<!-- -->
+
+``` r
+#pnumlbw and pnumsga are exlusively zero values.
+```
+
+On the basis of this exploratory data analysis, head circumference and
+extremity length have the strongest correlation with birthweight.
+
+``` r
+fit = lm(bwt ~ bhead + blength, data = birthweight_factor_df)
+birthweight_factor_df %>% modelr::add_residuals(fit) %>% ggplot(aes(x=bhead, y = resid)) + geom_point() ##Mostly, there is a uniform distribution of residuals
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% modelr::add_residuals(fit) %>% ggplot(aes(x=blength, y = resid)) + geom_point() ##Mostly, there is a uniform distribution of residuals
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
