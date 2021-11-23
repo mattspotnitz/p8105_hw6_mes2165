@@ -20,6 +20,7 @@ library(tidyverse)
 
 ``` r
 library(ggplot2)
+library(modelr)
 ```
 
 \#\#Problem 1 I will import and view the birthweight dataset.
@@ -322,4 +323,23 @@ more models.
 ``` r
 fit_length_age = lm(bwt ~ blength + gaweeks, data = birthweight_factor_df)
 fit_three = lm (bwt ~ bhead + blength + babysex + bhead*blength*babysex, data = birthweight_factor_df)
+```
+
+I will look at the rmse of each model. I had to use the original
+datframe because the model won’t run with factors.
+
+``` r
+rmse(fit, birthweight_df)
+```
+
+    ## [1] 289.073
+
+``` r
+rmse(fit_length_age, birthweight_df)
+```
+
+    ## [1] 333.1023
+
+``` r
+#rmse(fit_three, birthweight_df)
 ```
