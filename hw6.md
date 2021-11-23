@@ -274,18 +274,41 @@ birthweight_factor_df %>% ggplot(aes(x = malform, y= bwt)) + geom_boxplot() # Th
 #pnumlbw and pnumsga are exlusively zero values.
 ```
 
-On the basis of this exploratory data analysis, head circumference and
-extremity length have the strongest correlation with birthweight.
+On the basis of this exploratory data analysis, a baby’s head
+circumference and length at birth have the strongest correlation with
+birthweight. I will map the residuals and fitted values of these models.
 
 ``` r
 fit = lm(bwt ~ bhead + blength, data = birthweight_factor_df)
-birthweight_factor_df %>% modelr::add_residuals(fit) %>% ggplot(aes(x=bhead, y = resid)) + geom_point() ##Mostly, there is a uniform distribution of residuals
+birthweight_factor_df %>% modelr::add_residuals(fit) %>% ggplot(aes(x=bhead, y = resid)) + geom_point() ##Overall, there is a uniform distribution of residuals
 ```
 
 ![](hw6_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
-birthweight_factor_df %>% modelr::add_residuals(fit) %>% ggplot(aes(x=blength, y = resid)) + geom_point() ##Mostly, there is a uniform distribution of residuals
+birthweight_factor_df %>% modelr::add_residuals(fit) %>% ggplot(aes(x=blength, y = resid)) + geom_point() ##Overall, there is a uniform distribution of residuals
 ```
 
-![](hw6_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](hw6_files/figure-gfm/unnamed-chunk-8-2.png)<!-- --> Now I will plot
+the fitted values
+
+``` r
+fit = lm(bwt ~ bhead + blength, data = birthweight_factor_df)
+birthweight_factor_df %>% modelr::add_predictions(fit) %>% ggplot(aes(x=bhead, y = pred)) + geom_point() ##Overall, there is a direct correlation between baby's head circumference at birth and fitted values
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% modelr::add_predictions(fit) %>% ggplot(aes(x=blength, y = pred)) + geom_point() ##Overall, there is a direct correlation betwen baby's length at birth and fitted values.
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-9-2.png)<!-- --> Now I will
+correlate the fitted values with residuals
+
+``` r
+fit = lm(bwt ~ bhead + blength, data = birthweight_factor_df)
+birthweight_factor_df  %>% modelr::add_residuals(fit)%>% modelr::add_predictions(fit) %>% ggplot(aes(x=pred, y = resid)) + geom_point() #Overall, there is not a strong correlation between fitted values and residuals
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
