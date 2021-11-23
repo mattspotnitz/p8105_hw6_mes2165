@@ -238,3 +238,36 @@ birthweight_factor_df %>% ggplot(aes(x = wtgain, y= bwt)) + geom_point() #There 
 ```
 
 ![](hw6_files/figure-gfm/unnamed-chunk-6-12.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = parity, y= bwt)) + geom_point() #There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-13.png)<!-- --> Now I will plot
+brithweight by non-continuous variables
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = babysex, y= bwt)) + geom_boxplot()   #There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = frace, y= bwt)) + geom_boxplot()   #There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = mrace, y= bwt)) + geom_boxplot() #There is not a strong correlation 
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = malform, y= bwt)) + geom_boxplot() # There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-7-4.png)<!-- --> On the basis of
+this exploratory data analysis, head circumference and extremity length
+have the strongest correlation with birthweight.
