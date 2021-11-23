@@ -308,7 +308,18 @@ correlate the fitted values with residuals
 
 ``` r
 fit = lm(bwt ~ bhead + blength, data = birthweight_factor_df)
-birthweight_factor_df  %>% modelr::add_residuals(fit)%>% modelr::add_predictions(fit) %>% ggplot(aes(x=pred, y = resid)) + geom_point() #Overall, there is not a strong correlation between fitted values and residuals
+birthweight_factor_df  %>% modelr::add_residuals(fit)%>% modelr::add_predictions(fit) %>% ggplot(aes(x=pred, y = resid)) + geom_point() +    labs(
+    title = "Residuals vs. Fitted Values",
+    x = "Fitted Values",
+    y = "Residuals",
+    caption = "Birthweight Data"
+  )  + theme_minimal() #Overall, there is not a strong correlation between fitted values and residuals
 ```
 
-![](hw6_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](hw6_files/figure-gfm/unnamed-chunk-10-1.png)<!-- --> Now I will fit
+more models.
+
+``` r
+fit_length_age = lm(bwt ~ blength + gaweeks, data = birthweight_factor_df)
+fit_three = lm (bwt ~ bhead + blength + babysex + bhead*blength*babysex, data = birthweight_factor_df)
+```
