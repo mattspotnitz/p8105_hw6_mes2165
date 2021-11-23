@@ -81,8 +81,10 @@ birthweight_factor_df  %>% modelr::add_residuals(fit)%>% modelr::add_predictions
     caption = "Birthweight Data"
   )  + theme_minimal() #Overall, there is not a strong correlation between fitted values and residuals
 ```
-Now I will fit more models.
+Now I will fit more models. In order to make the model with baby sex run, the input needs to be numeric and not a factor.  Also, I will need to split the datframe into training and testing data.
+
 ```{r}
+###Convert the data into a test/train split.
 fit_length_age = lm(bwt ~ blength + gaweeks, data = birthweight_factor_df)
 fit_three = lm (bwt ~ bhead + blength + babysex + bhead*blength*babysex, data = birthweight_factor_df)
 ```

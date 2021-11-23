@@ -318,9 +318,12 @@ birthweight_factor_df  %>% modelr::add_residuals(fit)%>% modelr::add_predictions
 ```
 
 ![](hw6_files/figure-gfm/unnamed-chunk-10-1.png)<!-- --> Now I will fit
-more models.
+more models. In order to make the model with baby sex run, the input
+needs to be numeric and not a factor. Also, I will need to split the
+datframe into training and testing data.
 
 ``` r
+###Convert the data into a test/train split.
 fit_length_age = lm(bwt ~ blength + gaweeks, data = birthweight_factor_df)
 fit_three = lm (bwt ~ bhead + blength + babysex + bhead*blength*babysex, data = birthweight_factor_df)
 ```
