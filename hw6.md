@@ -136,3 +136,105 @@ ggplot(gather(birthweight_df), aes(value)) + geom_histogram(bins = 10) + facet_w
 ![](hw6_files/figure-gfm/unnamed-chunk-4-1.png)<!-- --> After looking at
 these plots, I intend to convert babysex, frace, mrace, malform, and
 mrace into factor variables.
+
+``` r
+birthweight_factor_df = birthweight_df %>% mutate (babysex = as.factor(babysex), frace = as.factor(frace), mrace = as.factor(mrace), malform = as.factor(malform), mrace = as.factor(mrace))
+str(birthweight_factor_df)
+```
+
+    ## 'data.frame':    4342 obs. of  20 variables:
+    ##  $ babysex : Factor w/ 2 levels "1","2": 2 1 2 1 2 1 2 2 1 1 ...
+    ##  $ bhead   : int  34 34 36 34 34 33 33 33 36 33 ...
+    ##  $ blength : int  51 48 50 52 52 52 46 49 52 50 ...
+    ##  $ bwt     : int  3629 3062 3345 3062 3374 3374 2523 2778 3515 3459 ...
+    ##  $ delwt   : int  177 156 148 157 156 129 126 140 146 169 ...
+    ##  $ fincome : int  35 65 85 55 5 55 96 5 85 75 ...
+    ##  $ frace   : Factor w/ 5 levels "1","2","3","4",..: 1 2 1 1 1 1 2 1 1 2 ...
+    ##  $ gaweeks : num  39.9 25.9 39.9 40 41.6 ...
+    ##  $ malform : Factor w/ 2 levels "0","1": 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ menarche: int  13 14 12 14 13 12 14 12 11 12 ...
+    ##  $ mheight : int  63 65 64 64 66 66 72 62 61 64 ...
+    ##  $ momage  : int  36 25 29 18 20 23 29 19 13 19 ...
+    ##  $ mrace   : Factor w/ 4 levels "1","2","3","4": 1 2 1 1 1 1 2 1 1 2 ...
+    ##  $ parity  : int  3 0 0 0 0 0 0 0 0 0 ...
+    ##  $ pnumlbw : int  0 0 0 0 0 0 0 0 0 0 ...
+    ##  $ pnumsga : int  0 0 0 0 0 0 0 0 0 0 ...
+    ##  $ ppbmi   : num  26.3 21.3 23.6 21.8 21 ...
+    ##  $ ppwt    : int  148 128 137 127 130 115 105 119 105 145 ...
+    ##  $ smoken  : num  0 0 1 10 1 0 0 0 0 4 ...
+    ##  $ wtgain  : int  29 28 11 30 26 14 21 21 41 24 ...
+
+I will make scatter plots for continuous variables that may be assocaite
+with birthweight.
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = bhead, y= bwt)) + geom_point()  ##On inspection, there is a corrleation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = blength, y= bwt)) + geom_point() ##On inspection, there is a corrrelation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = delwt, y= bwt)) + geom_point() #There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = gaweeks, y= bwt)) + geom_point() ##There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = menarche, y= bwt)) + geom_point()#There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-5.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = fincome, y= bwt)) + geom_point() #There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-6.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = mheight, y= bwt)) + geom_point() #There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-7.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = momage, y= bwt)) + geom_point() #There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-8.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = ppbmi, y= bwt)) + geom_point() #There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-9.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = ppwt, y= bwt)) + geom_point()#There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-10.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = smoken, y= bwt)) + geom_point() #There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-11.png)<!-- -->
+
+``` r
+birthweight_factor_df %>% ggplot(aes(x = wtgain, y= bwt)) + geom_point() #There is not a strong correlation
+```
+
+![](hw6_files/figure-gfm/unnamed-chunk-6-12.png)<!-- -->
