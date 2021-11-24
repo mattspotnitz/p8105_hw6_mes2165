@@ -35,7 +35,7 @@ After looking at these plots, I intend to convert babysex, frace, mrace, malform
 birthweight_factor_df = birthweight_df %>% mutate (babysex = as.factor(babysex), frace = as.factor(frace), mrace = as.factor(mrace), malform = as.factor(malform), mrace = as.factor(mrace))
 str(birthweight_factor_df)
 ```
-I will make scatter plots for continuous variables that may be assocaite with birthweight.
+I will make scatter plots for numerical variables that may be associated with birthweight.
 ```{r}
 birthweight_factor_df %>% ggplot(aes(x = bhead, y= bwt)) + geom_point()  ##On inspection, there is a corrleation
 birthweight_factor_df %>% ggplot(aes(x = blength, y= bwt)) + geom_point() ##On inspection, there is a corrrelation
@@ -145,3 +145,30 @@ cv_df %>%
   )  + theme_minimal()
 ```
 Overall, the model that used child length at birth and gestational age, without interaction terms, had the highest residual error ("model_two).  My model, which used head circumference  and child length at birth without interactions("model_one"), had similar performance to a model that used head cirumferece and length at birth, sex, and interactions terms of all three variables ("model_three").
+
+#Problem Two
+```{r}
+weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728"),
+    var = c("PRCP", "TMIN", "TMAX"), 
+    date_min = "2017-01-01",
+    date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(id, USW00094728 = "CentralPark_NY"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
+```{r}
+head_df = janitor::clean_names(weather_df)
+head(weather_df)
+tail(weather_df)
+str(weather_df)
+view(weather_df)
+```
+We are going to fit a linear model with tmax as the response and tmin as the predictor
+```{r}
+lm (tmax~tmin, data=weather_df) %>% broom::glance()
+```
