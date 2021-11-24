@@ -172,3 +172,58 @@ We are going to fit a linear model with tmax as the response and tmin as the pre
 ```{r}
 lm (tmax~tmin, data=weather_df) %>% broom::glance()
 ```
+Now I am going to make a boot smaple funcion.
+```{r}
+boot_sample = function(df) {
+  sample_frac(df, replace = TRUE)
+}
+```
+I will run the boot sample function to check that it works
+```{r}
+boot_sample(weather_df) %>% 
+  ggplot(aes(x = tmax, y = tmin)) + 
+  geom_point(alpha = .5) +
+  stat_smooth(method = "lm")
+```
+I wll now run 5000 boot straps
+```{r}
+boot_straps = 
+  tibble(
+    strap_number = 1:5000,
+    strap_sample = rerun(5000, boot_sample(weather_df))
+  )
+
+boot_straps
+```
+
+```{r}
+bootstrap_results = 
+  boot_straps %>% 
+  mutate(
+    models = map(strap_sample, ~lm(tmax ~ tmin, data = .x) ),
+    results = map(models, broom::glance)) %>% 
+  select(-strap_sample, -models) %>% 
+  unnest(results) 
+
+bootstrap_results %>% 
+  summarize(
+    ci_lower = quantile(r.squared, 0.025), 
+    ci_upper = quantile(r.squared, 0.975))  
+```
+On the basis of this output the 95% confidence interval for r squared ranges from 0.894 to 0.927.
+
+```{r}
+bootstrap_results = 
+  boot_straps %>% 
+  mutate(
+    models = map(strap_sample, ~lm(tmax ~ tmin, data = .x) ),
+    results = map(models, broom::tidy)) %>% 
+  select(-strap_sample, -models) %>% 
+  unnest(results) 
+
+bootstrap_results %>% 
+  summarize(
+    ci_lower = quantile(estimate, 0.025), 
+    ci_upper = quantile(estimate, 0.975))  
+
+```
