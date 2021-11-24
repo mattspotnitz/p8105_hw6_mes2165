@@ -221,9 +221,9 @@ bootstrap_results =
   select(-strap_sample, -models) %>% 
   unnest(results) 
 
-bootstrap_results %>% 
+bootstrap_results %>%   group_by(term) %>% 
   summarize(
     ci_lower = quantile(estimate, 0.025), 
     ci_upper = quantile(estimate, 0.975))  
-
 ```
+On the basis of this output the 95% confidence interval of log(B0 • B1) ranges from the log (6.71 * 1.01) to log (7.71 * 1.07). Alternatively, those values are 0.83 to 0.92.
