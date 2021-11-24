@@ -122,10 +122,11 @@ cv_df =
     model_two  = map(train, ~lm(bwt ~ blength + gaweeks, data =.x)),
     model_three  = map(train, ~lm (bwt ~ bhead + blength + babysex + bhead*blength*babysex, data = .x))) %>% 
    mutate(
-    model_one = map2_dbl(model_one, test, ~rmse(model = .x, data = .y)),
-    model_two = map2_dbl(model_two, test, ~rmse(model = .x, data = .y)),
-    model_three = map2_dbl(model_three, test, ~rmse(model = .x, data = .y)))
+    rmse_model_one = map2_dbl(model_one, test, ~rmse(model = .x, data = .y)),
+    rmse_model_two = map2_dbl(model_two, test, ~rmse(model = .x, data = .y)),
+    rmse_model_three = map2_dbl(model_three, test, ~rmse(model = .x, data = .y)))
 ```
+
 Now I will make violin plots of each model
 ```{r}
 cv_df %>% 
@@ -136,17 +137,11 @@ cv_df %>%
     values_to = "rmse",
     names_prefix = "rmse_") %>% 
   mutate(model = fct_inorder(model)) %>% 
-  ggplot(aes(x = model, y = rmse)) + geom_violin()
+  ggplot(aes(x = model, y = rmse)) + geom_violin()+    labs(
+    title = "Violin Plot of Residuals vs. Candidate Models",
+    x = "Candidate Models",
+    y = "Residuals",
+    caption = "Birthweight Data"
+  )  + theme_minimal()
 ```
-
-```{r}
-###Convert the data into a test/train split.
-fit_length_age = lm(bwt ~ blength + gaweeks, data = birthweight_factor_df)
-fit_three = lm (bwt ~ bhead + blength + babysex + bhead*blength*babysex, data = birthweight_factor_df)
-```
-I will look at the rmse of each model. I had to use the original datframe because the model won't run with factors.
-```{r}
-rmse(fit, birthweight_df)
-rmse(fit_length_age, birthweight_df)
-#rmse(fit_three, birthweight_df)
-```
+Overall, the model that used child length at birth and gestational age, without interaction terms, had the highest residual error ("model_two).  My model, which used head circumference  and child length at birth without interactions("model_one"), had similar performance to a model that used head cirumferece and length at birth, sex, and interactions terms of all three variables ("model_three").
