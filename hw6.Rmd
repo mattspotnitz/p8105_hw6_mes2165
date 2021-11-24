@@ -8,6 +8,7 @@ output: github_document
 library(tidyverse)
 library(ggplot2)
 library(modelr)
+library(mgcv)
 ```
 ##Problem 1
 I will import and view the birthweight dataset.
@@ -81,7 +82,62 @@ birthweight_factor_df  %>% modelr::add_residuals(fit)%>% modelr::add_predictions
     caption = "Birthweight Data"
   )  + theme_minimal() #Overall, there is not a strong correlation between fitted values and residuals
 ```
-Now I will fit more models. In order to make the model with baby sex run, the input needs to be numeric and not a factor.  Also, I will need to split the datframe into training and testing data.
+Now I will fit more models. In order to make the model with baby sex run, the input needs to be numeric and not a factor.  Also, I will need to split the data frame into training and testing data.
+```{r}
+birthweight_df = mutate(birthweight_df, id = row_number())
+view(birthweight_df)
+train_df = sample_n(birthweight_df, 80)
+test_df = anti_join(birthweight_df, train_df, by = 'id')
+```
+Fit the linear models with the training data
+```{r}
+fit = lm(bwt ~ bhead + blength, data = birthweight_df)
+fit_length_age = lm(bwt ~ blength + gaweeks, data = birthweight_df)
+fit_three = lm (bwt ~ bhead + blength + babysex + bhead*blength*babysex, data = birthweight_df)
+```
+Now I will add model performance
+```{r}
+train_df %>% 
+  gather_predictions(fit, fit_length_age, fit_three) %>% 
+  mutate(model = fct_inorder(model))
+```
+Cross validation
+```{r}
+cv_df = crossv_mc(birthweight_df, 100)
+```
+Creating testing and training datasets
+```{r}
+cv_df =
+  cv_df %>% 
+  mutate(
+    train = map(train, as_tibble),
+    test = map(test, as_tibble))
+```
+Now we will do cross validation on different models
+```{r}
+cv_df = 
+  cv_df %>% 
+  mutate(
+    model_one  = map(train, ~lm(bwt ~ bhead + blength, data = .x)),
+    model_two  = map(train, ~lm(bwt ~ blength + gaweeks, data =.x)),
+    model_three  = map(train, ~lm (bwt ~ bhead + blength + babysex + bhead*blength*babysex, data = .x))) %>% 
+   mutate(
+    model_one = map2_dbl(model_one, test, ~rmse(model = .x, data = .y)),
+    model_two = map2_dbl(model_two, test, ~rmse(model = .x, data = .y)),
+    model_three = map2_dbl(model_three, test, ~rmse(model = .x, data = .y)))
+```
+Now I will make violin plots of each model
+```{r}
+cv_df %>% 
+  select(starts_with("rmse")) %>% 
+  pivot_longer(
+    everything(),
+    names_to = "model", 
+    values_to = "rmse",
+    names_prefix = "rmse_") %>% 
+  mutate(model = fct_inorder(model)) %>% 
+  ggplot(aes(x = model, y = rmse)) + geom_violin()
+```
 
 ```{r}
 ###Convert the data into a test/train split.
